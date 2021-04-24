@@ -1,0 +1,21 @@
+<div class="mt-4 mb-4 space-y-2">
+    <div class="font-bold text-xl">
+        Filters
+    </div>
+    <form method="post" action=""> {% csrf_token %}
+        <div class="grid grid-cols-8 gap-2 mb-3">
+            <input class="col-span-5 bg-gray-800 rounded pl-2 font-thin" placeholder="Name (All)" name="name" value="{{ search.name }}">            
+            </input>
+            <input class="col-span-3 bg-gray-800 rounded pl-2 font-thin" placeholder="Damage (All)" name="damage" value="{{ search.damage }}">
+            </input>
+            <input class="col-span-4 bg-gray-800 rounded pl-2 font-thin" placeholder="Raze (All)" name="raze" value="{{ search.raze }}">
+            </input>
+            <input class="col-span-4 bg-gray-800 rounded pl-2 font-thin" placeholder="Weakness (All)" name="weakness" value="{{ search.weakness }}">
+            </input>
+        </div>
+        <div class="">
+            <button class="bg-blue-500 text-gray-900 font-bold py-1 px-16 rounded-md" name="player_search"
+                id="player_search" value="player_search">Search</button>
+        </div>
+    </form>
+</div>

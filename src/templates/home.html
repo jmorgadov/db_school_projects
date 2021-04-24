@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="flex flex-col items-center p-20 justify-center">
+    <div class="flex grid grid-cols-1 gap-4 text-center">
+        {% for cat in categories %}
+        <div>        
+            <form method="post" action="{{ cat.url }}"> {% csrf_token %}
+                <button
+                    class="transition duration-500 ease-in-out bg-blue-500 p-5 pl-10 pr-10 rounded-xl text-2xl transform font-bold text-gray-900 hover:scale-110 motion-reduce:transition-none motion-reduce:transform-none ">
+                    {{ cat.name }}
+                </button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
