@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="flex items-center justify-center p-20">
+    <div class="grid grid-cols-12 gap-4 mt-4 pl-3 pr-3">
+        <div class="col-span-4 text-center">
+            {% include "add_data/item_button.html" with text="Player" action="add_data/player" %}
+        </div>
+        <div class="col-span-4 text-center">
+            {% include "add_data/item_button.html" with text="Spell" action="add_data/spell" %}
+        </div>
+        <div class="col-span-4 text-center">
+            {% include "add_data/item_button.html" with text="Beast" action="add_data/beast" %}
+        </div>
+        <div class="col-span-12 text-center">
+            {% include "add_data/item_button.html" with text="Simulate battle" action="add_data/sim_battle" %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
