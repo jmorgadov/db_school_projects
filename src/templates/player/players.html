@@ -1,7 +1,14 @@
 {% extends "filter.html" %}
 
 {% block filters %}
-{% include "player/player_search.html" %}
+{% include "assets/input.html" with col=5 placeholder="Name (All)" name="name" val=search.name %}
+{% include "assets/input.html" with col=3 placeholder="Damage (All)" name="damage" val=search.damage %}
+{% include "assets/input.html" with col=4 placeholder="Raze (All)" name="raze" val=search.raze %}
+{% include "assets/input.html" with col=4 placeholder="Weakness (All)" name="weakness" val=search.weakness %}
+{% endblock %}
+
+{% block filter_btn %}
+{% include "assets/button.html" with id="player_search" name="player_search" val="player_search" text="Search" %}
 {% endblock %}
 
 {% block main_row %}
