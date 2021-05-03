@@ -23,5 +23,6 @@ urlpatterns = [
     path('players', page_views.player_search_view, name='players'),
     path('beasts', page_views.beast_search_view, name='beasts'),
     path('add_data', dm_views.add_data_main_view, name='add-data'),
+    path('add_data/spell', dm_views.add_spell_view, name='create_spell'),
     path('admin/', admin.site.urls),
 ]
