@@ -1,19 +1,56 @@
 from django.shortcuts import render
-from .models import *
+
+from pages.models import Spell
 import copy
 
 # Create your views here.
 def add_data_main_view(request):
     return render(request, "add_data/add_data.html")
 
-default_context = {
+
+def validate_spell(name, damage, average_pts):
+    error, message = False, ''
+    return error, message
+
+
+
+def add_spell_view(request):
+    context = {
         'name' : '',
         'damage' : '',
-        'average_pts' : ''
-    }
+        'average_pts' : '',
+        'message' : '',
+        'message_color' : 'green'
+    }    
+
+    if request.method == 'POST':
+        print(request.POST)
+        if request.POST.get('add_spell'):
+            # Get fields values
+            name = request.POST['name']
+            context['name'] = name
+            damage = request.POST['damage']
+            context['damage'] = damage
+            average_pts = request.POST['average_pts']
+            context['average_pts'] = average_pts
+
+            # Validate values
+            error, message = validate_spell(name, damage, average_pts)
+
+            if not error:
+                filt = Spell.objects.filter(name=name)
+                if filt:
+                    spell = filt[0]
+                    spell.damage = damage
+                    spell.average_pts = average_pts
+                    context['message'] = 'Spell edited'
+                else:
+                    spell = Spell.objects.create(name=name, damage=damage,
+                                                 average_pts=average_pts)
+                    context['message'] = 'Spell created'
+                spell.save()
+            else:
+                context['message'] = message
+                context['message_color'] = 'red'   
     
-def add_spell_view(request):
-    context = copy.deepcopy(default_context)
-    # Aki hay que hacer parecido a como haces en views.player_search_view, para editar un spell
-    # if ...
     return render(request, "add_data/spell.html", context)
