@@ -9,9 +9,16 @@ def add_data_main_view(request):
 
 
 def validate_spell(name, damage, average_pts):
-    error, message = False, ''
-    return error, message
-
+    message = ''
+    if len(name) > 50:
+        message = 'Name too long (50 chars maximum)'
+    if len(damage) > 50:
+        message = 'Damage too long (50 chars maximum)'
+    try:
+        pts = int(average_pts)
+    except ValueError:
+        message = 'Average points must be an integer'
+    return len(message), message
 
 
 def add_spell_view(request):
