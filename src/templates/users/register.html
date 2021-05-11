@@ -1,46 +1,46 @@
-{% extends "base.html" %}
+{% extends "topless_base.html" %}
 
 {% block content %}
 <form method="post" action=""> {% csrf_token %}
     <div class="grid grid-cols-1 mx-auto gap-2 rounded-xl w-72 mt-20 m-10 p-1 m-2 text-center">
         <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Name *" name="name" value="{{ name }}" />        
         {% if name_error_msg %}
-        <div class="font-thin ml-2 text-blue-200 text-left text-xs">
+        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
            {{ name_error_msg }}
         </div>
         {% endif %}
 
         <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Last name" name="last_name" value="{{ last_name }}"/>
         {% if last_name_error_msg %}
-        <div class="font-thin ml-2 text-blue-200 text-left text-xs">
+        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
            {{ last_name_error_msg }}
         </div>
         {% endif %}
 
         <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Nick *" name="nick" value="{{ nick }}"/>
         {% if nick_error_msg %}
-        <div class="font-thin ml-2 text-blue-200 text-left text-xs">
+        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
            {{ nick_error_msg }}
         </div>
         {% endif %}
 
         <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Email *" name="email" value="{{ email }}"/>
         {% if email_error_msg %}
-        <div class="font-thin ml-2 text-blue-200 text-left text-xs">
+        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
            {{ email_error_msg }}
         </div>
         {% endif %}
 
         <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Password *" name="password" type="password"/>        
         {% if pass_error_msg %}
-        <div class="font-thin ml-2 text-blue-200 text-left text-xs">
+        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
            {{ pass_error_msg }}
         </div>
         {% endif %}
 
         <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Confirm password *" name="password_conf" type="password" />
         {% if pass_conf_error_msg %}
-        <div class="font-thin ml-2 text-blue-200 text-left text-xs">
+        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
            {{ pass_conf_error_msg }}
         </div>
         {% endif %}
@@ -48,11 +48,11 @@
         <div class="font-thin ml-2 text-gray-600 text-left text-xs">
             * Required fields
          </div>
-        <button class="w-2/4 mx-auto p-2 mt-2 bg-blue-200 rounded-md font-bold text-gray-900" name="register">
+        <button class="w-2/4 mx-auto p-2 mt-2 bg-blue-400 rounded-md font-bold text-gray-900" name="register">
             Create account
         </button>
 
-        <a href="../login/" class="p-2 font-thin text-blue-200" name="login">
+        <a href="../login/" class="p-2 font-thin text-blue-400" name="login">
             I have already an account.
         </a>
     </div>

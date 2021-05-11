@@ -1,3 +1,4 @@
+from django.contrib.auth import logout
 from django.shortcuts import redirect, render
 from .models import *
 import copy
@@ -25,6 +26,10 @@ def home_view(request):
     user = request.user
     if not user.is_authenticated:
         return redirect('start')
+    if request.POST:
+        if 'logout' in request.POST:
+            logout(request)
+            return redirect('login')
     context = copy.deepcopy(general_context)
     return render(request, 'home.html', context)
 

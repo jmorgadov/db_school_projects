@@ -2,11 +2,12 @@
 
 
 {% block content %}
+
 <div class="flex flex-col items-center p-20 justify-center">
     <div class="flex grid grid-cols-2 gap-4 text-center">
+        {% if user.is_superuser %}
         <div class="col-span-1 p-3 border rounded-3xl border-gray-700">
             <div class="m-5">
-
                 <form method="post" action="/add_data"> {% csrf_token %}
                     <button
                     class="transition duration-500 ease-in-out bg-blue-500 p-5 pl-10 pr-10 rounded-xl text-2xl transform font-bold text-gray-900 hover:scale-110 motion-reduce:transition-none motion-reduce:transform-none ">
@@ -14,6 +15,7 @@
                 </button>
             </form>
         </div>
+        {% endif %}
         </div>
         <div class="col-span-1 p-3 border rounded-3xl border-gray-700">            
             {% for cat in categories %}
