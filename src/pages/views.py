@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import *
 import copy
 
@@ -22,6 +22,9 @@ general_context = {
 
 # Create your views here.
 def home_view(request):
+    user = request.user
+    if not user.is_authenticated:
+        return redirect('start')
     context = copy.deepcopy(general_context)
     return render(request, 'home.html', context)
 
@@ -48,7 +51,7 @@ def player_search_view(request):
     context['data'] = all_players
     
 
-    return render(request, 'player\players.html', context)
+    return render(request, 'player/players.html', context)
 
     
 def beast_search_view(request):
@@ -71,4 +74,4 @@ def beast_search_view(request):
         all_beasts = Beast.objects.all()
     context['data'] = all_beasts    
 
-    return render(request, 'beast\\beasts.html', context)
+    return render(request, 'beast/beasts.html', context)

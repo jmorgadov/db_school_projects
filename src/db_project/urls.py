@@ -17,12 +17,16 @@ from django.contrib import admin
 from django.urls import path
 from pages import views as page_views
 from data_manager import views as dm_views
+from users import views as users_views
 
 urlpatterns = [
     path('', page_views.home_view, name='home'),
-    path('players', page_views.player_search_view, name='players'),
-    path('beasts', page_views.beast_search_view, name='beasts'),
-    path('add_data', dm_views.add_data_main_view, name='add-data'),
-    path('add_data/spell', dm_views.add_spell_view, name='create_spell'),
+    path('login/', users_views.login_view, name='login'),
+    path('register/', users_views.register_view, name='register'),
+    path('start/', users_views.start_view, name='start'),
+    path('players/', page_views.player_search_view, name='players'),
+    path('beasts/', page_views.beast_search_view, name='beasts'),
+    path('add_data/', dm_views.add_data_main_view, name='add-data'),
+    path('add_data/spell/', dm_views.add_spell_view, name='create_spell'),
     path('admin/', admin.site.urls),
 ]
