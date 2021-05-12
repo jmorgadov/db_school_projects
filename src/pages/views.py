@@ -7,15 +7,18 @@ general_context = {
     'categories' : [
         {
             'name' : 'Players',
-            'url' : 'players'
+            'url' : 'players',
+            'image' : 'player.jpg'
         },
         {
             'name' : 'Beasts',
-            'url' : 'beasts'
+            'url' : 'beasts',
+            'image' : 'beasts.jpg'
         },
         {
             'name' : 'Spells',
-            'url' : 'spells'
+            'url' : 'spells',
+            'image' : 'spell.jpg'
         }
     ],
     'text' : 'Welcome'
@@ -23,9 +26,9 @@ general_context = {
 
 # Create your views here.
 def home_view(request):
-    user = request.user
-    if not user.is_authenticated:
-        return redirect('start')
+    # user = request.user
+    # if not user.is_authenticated:
+    #     return redirect('start')
     if request.POST:
         if 'logout' in request.POST:
             logout(request)
