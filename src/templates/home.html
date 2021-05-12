@@ -2,8 +2,7 @@
 
 
 {% block content %}
-
-<div class="grid grid-cols-6 mx-auto p-10 w-full m-10 gap-3 justify-center">
+<div class="grid grid-cols-6 mx-auto p-10 w-full gap-3 justify-center">
     <div class="relative col-span-6 text-2xl text-gray-200 font-extrabold text-center">
         Search
     </div>
@@ -27,11 +26,11 @@
         </form>
     </div>
     {% endfor %}
+    {% if user.is_superuser %}
     <div class="relative col-span-6 text-2xl text-gray-200 font-extrabold text-center mt-3">
         Admin
     </div>
 
-    {% if user.is_superuser %}
     <div class="col-span-6 md:col-span-3 lg:col-span-2">
         <form method="post" action="add_data/"> {% csrf_token %}
             <button class="flex felx-row-reverse relative rounded-xl items-center h-28 w-full border border-gray-800">
