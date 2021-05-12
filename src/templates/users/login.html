@@ -8,15 +8,17 @@
             {{ form.non_field_errors }}
         </div>
         {% endif %}
-        <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Email" name="email" value="{{ form.email.value }}">
+        <input class="p-2 border border-gray-800 bg-gray-800 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Email" name="email"
+            value="{{ form.email.value }}" autocomplete="off" autofocus>
         </input>
-        <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Password" name="password" value="{{ form.password.value }}" type="password">
+        <input class="p-2 border border-gray-800 bg-gray-800 rounded font-thin text-gray-200 focus:border focus:outline-none focus:border-blue-400" placeholder="Password" name="password"
+            value="{{ form.password.value }}" type="password">
         </input>
-        <button class="w-2/4 mx-auto p-2 mt-2 bg-blue-400 rounded-md font-bold text-gray-900" name="login">
+        <button class="w-2/4 mx-auto p-2 mt-2 bg-blue-400 rounded-md font-bold text-gray-900 focus:outline-none" name="login">
             Login
         </button>
 
-        <a href="../register/" class="p-2 font-thin text-blue-400" name="register">
+        <a href="../register/" class="p-2 font-thin text-blue-400 focus:outline-none" name="register">
             I don't have an account.
         </a>
     </div>
