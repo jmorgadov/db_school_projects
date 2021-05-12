@@ -3,6 +3,8 @@ from django.http.request import HttpRequest
 from django.contrib.auth import authenticate, get_user_model, login, logout
 import re
 
+from users.forms import LoginForm
+
 User = get_user_model()
 
 # Create your views here.
@@ -78,27 +80,25 @@ def register_view(request: HttpRequest):
 
 
 def login_view(request: HttpRequest):
-    context = {
-        'error': False,
-        'error_message': '',
-    }
+    context = { }
 
     if request.POST:
         post = request.POST
-        if 'login' in post:
-            email = post['email']
-            password = post['password']
 
-            user: User = authenticate(request, username=email, password=password)
-            print(user)
-            if user is not None:
+        if 'login' in post:
+            form = LoginForm(post)
+            if not form.is_valid():
+                context['form'] = form
+            else:
+                cleaned_data = form.cleaned_data
+                email = cleaned_data.get('email')
+                password = cleaned_data.get('password')
+                user: User = authenticate(
+                    request,
+                    username=email,
+                    password=password
+                )
                 login(request, user)
                 return redirect('home')
-            else:
-                context['error'] = True
-                context['error_message'] = 'Invalid email and password combination'
 
-
-    print(request.POST)
-    print(context)
     return render(request, 'users/login.html', context)
