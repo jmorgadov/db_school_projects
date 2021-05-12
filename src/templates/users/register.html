@@ -3,45 +3,46 @@
 {% block content %}
 <form method="post" action=""> {% csrf_token %}
     <div class="grid grid-cols-1 mx-auto gap-2 rounded-xl w-72 mt-20 m-10 p-1 m-2 text-center">
-        <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Name *" name="name" value="{{ name }}" />        
-        {% if name_error_msg %}
+
+        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Name *" name="name" value="{{ form.name.value|default:'' }}" autocomplete="off" />        
+        {% if form.errors.name %}
         <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ name_error_msg }}
+           {{ form.errors.name }}
         </div>
         {% endif %}
-
-        <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Last name" name="last_name" value="{{ last_name }}"/>
-        {% if last_name_error_msg %}
+        
+        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Last name *" name="last_name" value="{{ form.last_name.value|default:'' }}" autocomplete="off" />        
+        {% if form.errors.last_name %}
         <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ last_name_error_msg }}
+           {{ form.errors.last_name }}
         </div>
         {% endif %}
-
-        <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Nick *" name="nick" value="{{ nick }}"/>
-        {% if nick_error_msg %}
+        
+        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Nick *" name="nick" value="{{ form.nick.value|default:'' }}" autocomplete="off" />        
+        {% if form.errors.nick %}
         <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ nick_error_msg }}
+           {{ form.errors.nick }}
         </div>
         {% endif %}
-
-        <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Email *" name="email" value="{{ email }}"/>
-        {% if email_error_msg %}
+        
+        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Email *" name="email" value="{{ form.email.value|default:'' }}" autocomplete="off" />        
+        {% if form.errors.email %}
         <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ email_error_msg }}
+           {{ form.errors.email }}
         </div>
         {% endif %}
-
-        <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Password *" name="password" type="password"/>        
-        {% if pass_error_msg %}
+        
+        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Password *" name="password" value="{{ form.password.value|default:'' }}" autocomplete="off" type="password"/>        
+        {% if form.errors.password %}
         <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ pass_error_msg }}
+           {{ form.errors.password }}
         </div>
         {% endif %}
-
-        <input class="p-2 bg-gray-800 rounded font-thin text-gray-200" placeholder="Confirm password *" name="password_conf" type="password" />
-        {% if pass_conf_error_msg %}
+        
+        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Confirm password *" name="password_conf" value="{{ form.password_conf.value|default:'' }}" autocomplete="off" type="password"/>        
+        {% if form.errors.password_conf %}
         <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ pass_conf_error_msg }}
+           {{ form.errors.password_conf }}
         </div>
         {% endif %}
         

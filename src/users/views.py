@@ -3,7 +3,7 @@ from django.http.request import HttpRequest
 from django.contrib.auth import authenticate, get_user_model, login, logout
 import re
 
-from users.forms import LoginForm
+from users.forms import LoginForm, RegisterForm
 
 User = get_user_model()
 
@@ -19,62 +19,28 @@ def start_view(request: HttpRequest):
 
 
 def register_view(request: HttpRequest):
-    context = { }
+    context = { 
+        'form': RegisterForm()
+    }
     if request.POST:
         post = request.POST
         if 'register' in post:
-            context['name'] = post['name']
-            name = post['name']
-            if name == '':
-                context['name_error_msg'] = 'Name required'
+            form = RegisterForm(post)
 
-            context['last_name'] = post['last_name']
-            last_name = post['last_name']
-
-            context['nick'] = post['nick']
-            nick = post['nick']
-            if nick == '':
-                context['nick_error_msg'] = 'Nick required'
+            if form.is_valid():
+                data = form.cleaned_data
+                UserModel = get_user_model()
+                new_user: User = UserModel.objects.create(
+                    name=data['name'],
+                    last_name=data['last_name'],
+                    nick=data['nick'],
+                    email=data['email']
+                )
+                new_user.set_password(data['password'])
+                new_user.save()
+                return redirect('login')
             else:
-                by_nick = User.objects.filter(nick=nick)
-                if by_nick:
-                    context['nick_error_msg'] = 'Nick already taken'
-
-
-            context['email'] = post['email']
-            email = post['email']
-            if email == '':
-                context['email_error_msg'] = 'Email required'
-            elif User.objects.filter(email=email):
-                context['email_error_msg'] = 'Email already taken'
-            elif not re.match('.+@.+\..+', email):
-                context['email_error_msg'] = 'Enter a valid email'
-
-            password = post['password']
-            password_conf = post['password_conf']
-            if password == '':
-                context['pass_error_msg'] = 'Password required'
-            elif password != password_conf:
-                context['pass_conf_error_msg'] = 'Passwords don\'t match'
-
-        error = 'name_error_msg' in context or \
-                'nick_error_msg' in context or \
-                'email_error_msg' in context or \
-                'pass_error_msg' in context or \
-                'pass_conf_error_msg' in context
-
-        if not error:
-            UserModel = get_user_model()
-            new_user: User = UserModel.objects.create(
-                name=name,
-                last_name=last_name,
-                nick=nick,
-                email=email
-            )
-            new_user.set_password(password)
-            new_user.save()
-            print(new_user)
-            return redirect('login')
+                context['form'] = form
 
     return render(request, 'users/register.html', context)
 
