@@ -1,5 +1,7 @@
 from django.contrib.auth import logout
 from django.shortcuts import redirect, render
+
+from pages.forms import PlayerSearchForm
 from .models import *
 import copy
 
@@ -38,27 +40,21 @@ def home_view(request):
 
 def player_search_view(request):
 
-    context = copy.deepcopy(general_context)
+    context = {
+        'form' : PlayerSearchForm()
+    }
 
     if request.method == 'POST':
-        print(request.POST)
+        post = request.POST
         if request.POST.get('player_search'):
-            search = {
-                'name' : request.POST['name'],
-                'raze' : request.POST['raze'],
-                'damage' : request.POST['damage'],
-                'weakness' : request.POST['weakness'],
-            }
-            context['search'] = search
-
-    if 'search' in context.keys():
-        filters = {k:v for k, v in search.items() if v != ''}
-        all_players = Player.objects.filter(**filters)
-    else:
-        all_players = Player.objects.all()
-    context['data'] = all_players
+            form = PlayerSearchForm(post)
+            if form.is_valid():
+                data = form.cleaned_data        
+                filters = {k:v for k, v in data.items() if v != ''}
+                all_players = Player.objects.filter(**filters)
+                context['data'] = all_players
+            context['form'] = form
     
-
     return render(request, 'player/players.html', context)
 
     

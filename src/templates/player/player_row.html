@@ -1,17 +1,19 @@
-<div class="grid grid-cols-12 gap-2 rounded mt-4 pl-3 pr-3 bg-gray-800">
-    <div class="">
+<div class="grid grid-cols-12 gap-2 rounded bg-gray-800">
+    <div class="w-full h-full rounded-l items-center bg-gray-700 text-center">
         {{ item.id }}
     </div>
-    <div class="col-span-4">
-        {{ item.name }}
-    </div>
-    <div class="col-span-3">
-        {{ item.raze }}
-    </div>
-    <div class="col-span-2 text-center">
-        {{ item.damage }}
-    </div>
-    <div class="col-span-2 text-center">
-        {{ item.weakness }}
+    <div class="col-span-11 grid grid-cols-4 gap-2">
+        <div class="">
+            {{ item.ent.name }}
+        </div>
+        <div class="">
+            {{ item.ent.raze }}
+        </div>
+        <div class="">
+            &#127993: {{ item.ent.damage }}
+        </div>
+        <div class="">
+            &#128128: {{ item.ent.weakness }}
+        </div>
     </div>
 </div>
