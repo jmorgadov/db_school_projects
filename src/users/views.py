@@ -1,11 +1,10 @@
 from django.shortcuts import redirect, render
 from django.http.request import HttpRequest
-from django.contrib.auth import authenticate, get_user_model, login, logout
-import re
+from django.contrib.auth import authenticate, get_user_model, login
 
 from users.forms import LoginForm, RegisterForm
 
-User = get_user_model()
+UserModel = get_user_model()
 
 # Create your views here.
 def start_view(request: HttpRequest):
@@ -19,18 +18,15 @@ def start_view(request: HttpRequest):
 
 
 def register_view(request: HttpRequest):
-    context = { 
-        'form': RegisterForm()
-    }
+    context = { 'form': RegisterForm() }
     if request.POST:
         post = request.POST
+
         if 'register' in post:
             form = RegisterForm(post)
-
             if form.is_valid():
                 data = form.cleaned_data
-                UserModel = get_user_model()
-                new_user: User = UserModel.objects.create(
+                new_user = UserModel.objects.create(
                     name=data['name'],
                     last_name=data['last_name'],
                     nick=data['nick'],
@@ -53,18 +49,14 @@ def login_view(request: HttpRequest):
 
         if 'login' in post:
             form = LoginForm(post)
-            if not form.is_valid():
-                context['form'] = form
-            else:
+            if form.is_valid():
                 cleaned_data = form.cleaned_data
                 email = cleaned_data.get('email')
                 password = cleaned_data.get('password')
-                user: User = authenticate(
-                    request,
-                    username=email,
-                    password=password
-                )
+                user = authenticate(request, username=email, password=password)
                 login(request, user)
                 return redirect('home')
+            else:
+                context['form'] = form
 
     return render(request, 'users/login.html', context)
