@@ -28,9 +28,9 @@ general_context = {
 
 # Create your views here.
 def home_view(request):
-    # user = request.user
-    # if not user.is_authenticated:
-    #     return redirect('start')
+    user = request.user
+    if not user.is_authenticated:
+        return redirect('start')
     if request.POST:
         if 'logout' in request.POST:
             logout(request)
