@@ -3,11 +3,11 @@ from django.contrib.auth import logout
 from django.http.request import HttpRequest
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
-from django.db.models import Q, Count
+from pages.generate import create_random_data
 
 from pages.forms import PlayerSearchForm
 from pages.models import *
-import copy
+
 
 # Create your views here.
 class BaseView(TemplateView):
@@ -33,6 +33,12 @@ class BaseView(TemplateView):
 class HomeView(BaseView):
 
     template_name = 'home.html'
+
+    def post(self, request: HttpRequest, *args, **kwargs):
+        post = request.POST
+        if 'generate' in post:
+            create_random_data()
+        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)

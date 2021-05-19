@@ -1,0 +1,20 @@
+{
+    "player_names": [
+        "Librada", "Basilia", "Lisa", "Jennine", "Mana", "Norman", "Vickey", "Meryl", "Earle", "Hsiu", "Duane", "Cherish", "Dalene", "Hugh", "Nathaniel", "Claudette", "Ashlyn",  "Nannette", "Laveta", "Marlin", "Trina", "Delmy", "Isabell", "Jacquelyne", "Debbi", "Marguerita", "Vickie", "Marquetta", "Ignacia", "Dianna", "Camilla", "Phebe", "Desire", "Valeria", "Erich", "Tillie", "Lyndia", "Rocio", "Georgina", "Anabel", "Tessa",  "Lucia", "Angeline", "Cliff", "Amalia", "Jerrod", "Lucie", "Kimberely", "Danial", "Yael"
+    ],
+    "spells": [
+        "Arniel's Convection", "Flames", "Frostbite", "Sparks", "Vampiric Drain", "Fire Rune", "Firebolt", "Frost Rune", "Ice Spike", "Lightning Bolt", "Lightning Rune", "Chain Lightning", "Fireball", "Flame Cloak", "Frost Cloak", "Ice Storm", "Lightning Cloak", "Icy Spear", "Incinerate", "Thunderbolt", "Wall of Fire", "Wall of Frost", "Wall of Storms", "Blizzard", "Fire Storm", "Lightning Storm"
+    ],
+    "locations":[
+        "Bleakwind Basin", "Blizzard Rest", "Broken Limb Camp", "Cradlecrush Rock", "Guldun Rock", "Red Road Pass", "Secunda's Kiss", "Sleeping Tree Camp", "Steamcrag Camp", "Stonehill Bluff", "Talking Stone Camp", "Tumble Arch Pass"
+    ],
+    "beasts":[
+        "Troll", "Frost Troll", "Udefrykte", "Armored Troll", "Spriggan", "Spriggan Matron", "Spriggan Earth Mother", "Burnt Spriggan", "Giant", "Frost Giant", "Karstaag", "Grok", "Frostbite Spider", "Giant Frostbite Spider", "Nimhe", "Lis", "Wounded Frostbite Spider", "King Olaf One-Eye", "Sigdis Gauldurson", "Jyrik Gauldurson", "Mikrul Gauldurson", "Red Eagle", "Fjori", "Holgeir", "Curalmil", "Gatekeeper", "Yngol's Shade", "Guardian Saerek", "Guardian Torsten", "Alduin", "Mirmulnir", "Nahagliiv", "Odahviing", "Paarthurnax", "Durnehviir", "Sahloknir", "Viinturuth", "Vuljotnaak", "Vulthuryol", "Naaslaarum", "Voslaarum", "Sahrotaar", "Krosulhah", "Kruziikrel", "Relonikiv", "Numinex"
+    ],
+    "damages":[
+        "Water", "Fire", "Air", "Rock", "Sand", "Ice"
+    ],
+    "races":[
+        "Altmer", "Argonian", "Bosmer", "Breton", "Dunmer", "Imperial", "Khajiit", "Nord", "Orsimer", "Redguard"
+    ]
+}

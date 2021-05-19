@@ -3,8 +3,10 @@ from django.db.models.aggregates import Count
 from django.db.models.query_utils import Q
 
 # Create your models here.
+class Location(models.Model):
+    name = models.CharField(max_length=50, blank=False, null=False)
 class Battle(models.Model):
-    place = models.CharField(max_length=50, blank=False, null=False)
+    location = models.ForeignKey(Location, models.CASCADE)
     date = models.DateField(blank=False, null=False)
 
 class BattleParticipant(models.Model):
@@ -15,6 +17,8 @@ class BattleParticipant(models.Model):
 class Attack(models.Model):
     defender_pts_before = models.IntegerField(blank=False, null=False)
     spell = models.ForeignKey("Spell", models.CASCADE)
+    attacker = models.ForeignKey("Ent", models.CASCADE, related_name='attacker')
+    deffender = models.ForeignKey("Ent", models.CASCADE, related_name='deffender')
 
 class Ent(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False)
@@ -22,8 +26,8 @@ class Ent(models.Model):
     damage = models.CharField(max_length=50, blank=False, null=False)
     weakness = models.CharField(max_length=50, blank=False, null=False)
     health = models.IntegerField(default=100, blank=False, null=False)
-    attacks = models.ManyToManyField("Ent", through=Attack)
-    battles = models.ManyToManyField(Battle, through=BattleParticipant)
+    attacks = models.ManyToManyField('self', through=Attack, symmetrical=False, related_name='attacked_from')
+    battles = models.ManyToManyField(Battle, through=BattleParticipant, related_name='battles_part')
 
 class Spell(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False)
@@ -31,15 +35,14 @@ class Spell(models.Model):
     average_pts = models.IntegerField()
 
 class BattleEvent(models.Model):
-    attacker = models.ForeignKey(Ent, models.CASCADE, related_name='attacker')
-    defender = models.ForeignKey(Ent, models.CASCADE, related_name='defender')
+    attack = models.ForeignKey(Attack, models.CASCADE)
     battle = models.ForeignKey(Battle, models.CASCADE)
     number = models.IntegerField(blank=False, null=False)
 
 class Player(models.Model):
     ent = models.OneToOneField(Ent, models.CASCADE)
-    spells_in_use = models.ManyToManyField(Spell, related_name='in_use')
-    known_spells = models.ManyToManyField(Spell, related_name='knonw')
+    spells_in_use = models.ManyToManyField(Spell, related_name='in_use_by')
+    known_spells = models.ManyToManyField(Spell, related_name='knonw_by')
 
     def wins_battles():
         return Count(

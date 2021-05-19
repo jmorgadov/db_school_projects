@@ -1,0 +1,59 @@
+{
+    "battles":
+    [
+
+    ],
+    "spells":
+    [
+        {
+            "name": "spell_1",
+            "damage": "Water",
+            "average_pts": 10
+        },        
+        {
+            "name": "spell_2",
+            "damage": "Water",
+            "average_pts": 5
+        },
+        {
+            "name": "spell_3",
+            "damage": "Fire",
+            "average_pts": 5
+        }
+    ],
+    "ents":[
+        {
+            "name": "Mariano",
+            "raze": "Human",
+            "damage": "Fire",
+            "weakness": "Watter",
+            "health": 10
+        }
+    ],
+    "attacks":
+    [
+
+    ],
+    "battle_events":
+    [
+
+    ],
+    "battle_partic":
+    [
+
+    ],
+    "players":
+    [
+        {
+            "ent": 0,
+            "known_spells": [0,2]
+        }
+    ],
+    "beasts":
+    [
+        {
+            "ent": 0,
+            "damage_pts": 20
+        }
+    ]
+}
