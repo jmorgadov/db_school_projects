@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.aggregates import Count
+from django.db.models.query_utils import Q
 
 # Create your models here.
 class Battle(models.Model):
@@ -38,6 +40,12 @@ class Player(models.Model):
     ent = models.OneToOneField(Ent, models.CASCADE)
     spells_in_use = models.ManyToManyField(Spell, related_name='in_use')
     known_spells = models.ManyToManyField(Spell, related_name='knonw')
+
+    def wins_battles():
+        return Count(
+            'ent__battles',
+            filter=Q(ent__battles__battleparticipant__winner=True)
+        )
 
 class Beast(models.Model):
     ent = models.OneToOneField(Ent, models.CASCADE)

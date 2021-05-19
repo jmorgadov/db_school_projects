@@ -3,13 +3,13 @@ from django.contrib.auth import logout
 from django.http.request import HttpRequest
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
+from django.db.models import Q, Count
 
 from pages.forms import PlayerSearchForm
 from pages.models import *
 import copy
 
 # Create your views here.
-
 class BaseView(TemplateView):
     def get(self, request: HttpRequest, *args, **kwargs):
         user = request.user
@@ -27,7 +27,7 @@ class BaseView(TemplateView):
         if 'logout' in post:
             logout(request)
             return redirect('login')
-        return self.get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
 
 class HomeView(BaseView):
@@ -63,7 +63,11 @@ class PlayerSearchView(BaseView):
             if form.is_valid():
                 data = form.cleaned_data
                 filters = {k: v for k, v in data.items() if v != ''}
-                all_players = Player.objects.filter(**filters)
+                all_players = (
+                    Player.objects
+                        .filter(**filters)
+                        .annotate(win_battles=Player.wins_battles())
+                    )
                 self.extra_context['data'] = all_players
             self.extra_context['form'] = form
 

@@ -2,7 +2,7 @@
     <div class="w-full h-full rounded-l items-center bg-gray-700 text-center">
         {{ item.id }}
     </div>
-    <div class="col-span-11 grid grid-cols-4 gap-2">
+    <div class="col-span-11 grid grid-cols-4 gap-2 py-1">
         <div class="">
             {{ item.ent.name }}
         </div>
@@ -14,6 +14,14 @@
         </div>
         <div class="">
             &#128128: {{ item.ent.weakness }}
+        </div>
+        <div class="col-span-full flex flex-row">
+            <div class="w-1/2">
+                <p>Win battels: {{ item.win_battles|default:'0' }} </p>
+            </div>
+            <div class="w-1/2">
+                <p>Total damage points: {{ item.total_damage_points|default:'0' }} </p>
+            </div>
         </div>
     </div>
 </div>

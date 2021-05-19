@@ -11,7 +11,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mb-3">
                 {% for field in form %}
                     {% include "assets/input.html" with name=field.name ph=field.label val=field.value %}
-                    {% endfor %}
+                {% endfor %}
                 </div>
                 <div class="">
                 {% include "assets/button.html" with id="player_search" name="player_search" val="player_search" text="Search" %}
