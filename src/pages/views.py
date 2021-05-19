@@ -67,14 +67,7 @@ class PlayerSearchView(BaseView):
         if request.POST.get('player_search'):
             form = PlayerSearchForm(post)
             if form.is_valid():
-                data = form.cleaned_data
-                filters = {k: v for k, v in data.items() if v != ''}
-                all_players = (
-                    Player.objects
-                        .filter(**filters)
-                        .annotate(win_battles=Player.wins_battles())
-                    )
-                self.extra_context['data'] = all_players
+                self.extra_context['data'] = form.get_players()
             self.extra_context['form'] = form
 
         return super().post(request, *args, **kwargs)

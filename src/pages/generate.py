@@ -25,11 +25,7 @@ def clean_db():
         clean_model(t)
 
 def create_random_data():
-    clean_model(Ent)
-    clean_model(Player)
-    clean_model(Beast)
-    clean_model(Location)
-    clean_model(Spell)
+    clean_db()
 
     data = None
     with open('pages/fake_data/random_data.json', 'r', encoding='utf-8') as file:
@@ -65,7 +61,7 @@ def create_random_data():
             'ent': ent
         }
         p = Player.objects.create(**player_fields)
-        p.known_spells.set(sample(spells, k=randint(0,8)))
+        p.known_spells.set(sample(spells, k=randint(1,8)))
 
     for beast in data.get('beasts', []):
         damage, weakness = sample(damages, k=2)
