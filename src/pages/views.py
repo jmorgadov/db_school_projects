@@ -66,6 +66,9 @@ class PlayerSearchView(BaseView):
         post = request.POST
         if request.POST.get('player_search'):
             form = PlayerSearchForm(post)
+            if 'checked' not in post:
+                form.reverse = False
+            print(form.data)
             if form.is_valid():
                 self.extra_context['data'] = form.get_players()
             self.extra_context['form'] = form

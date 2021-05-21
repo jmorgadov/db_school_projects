@@ -26,24 +26,24 @@ class Attack(models.Model):
     damage_caused = models.IntegerField(default=0, blank=False, null=False)
 
     def save(self, *agrs, **kwagrs) -> None:
-        self.defender_pts_before = self.defender.health
+        # self.defender_pts_before = self.defender.health
         
-        dmg_pts = 0
-        ent_t, instance = self.attacker.ent_type
-        multiplier = (random() / 10) - 0.05
-        if ent_t == 'player':
-            dmg_pts = self.spell.average_pts + self.spell.average_pts * multiplier
-        elif ent_t == 'beast':
-            dmg_pts = instance.damage_pts + instance.damage_pts * multiplier
+        # dmg_pts = 0
+        # ent_t, instance = self.attacker.ent_type
+        # multiplier = (random() / 10) - 0.05
+        # if ent_t == 'player':
+        #     dmg_pts = self.spell.average_pts + self.spell.average_pts * multiplier
+        # elif ent_t == 'beast':
+        #     dmg_pts = instance.damage_pts + instance.damage_pts * multiplier
 
-        if self.defender.weakness == self.attacker.damage:
-            dmg_pts += 100
+        # if self.defender.weakness == self.attacker.damage:
+        #     dmg_pts += 100
 
-        new_health = max(0, self.defender.health - dmg_pts)
-        self.defender.health = new_health
-        self.defender.save()
+        # new_health = max(0, self.defender.health - dmg_pts)
+        # self.defender.health = new_health
+        # self.defender.save()
 
-        self.damage_caused = self.defender_pts_before - new_health
+        # self.damage_caused = self.defender_pts_before - new_health
         return super().save(*agrs, **kwagrs)
 
 class Ent(models.Model):
@@ -52,7 +52,6 @@ class Ent(models.Model):
     damage = models.CharField(max_length=50, blank=False, null=False)
     weakness = models.CharField(max_length=50, blank=False, null=False)
     health = models.FloatField(default=100, blank=False, null=False)
-    attacks = models.ManyToManyField('self', through=Attack, symmetrical=False, related_name='attacked_from')
     battles = models.ManyToManyField(Battle, through=BattleParticipant, related_name='battles_part')
 
     @property
@@ -97,13 +96,12 @@ class Player(models.Model):
     def wins_battles():
         return Count(
             'ent__battles',
-            filter=Q(ent__battles__battleparticipant__winner=True)
+            filter=Q(ent__battles__battleparticipant__winner=True),
+            distinct=True
         )
 
-    def total_damage_caused():
-        return Sum(
-            F('ent__attacks__attack__')
-        )
+    def damage_caused():
+        return Sum('ent__attacker__damage_caused')
 
 class Beast(models.Model):
     ent = models.OneToOneField(Ent, models.CASCADE)
@@ -151,13 +149,15 @@ def simulate_battle(participants=16):
     event = 0
     while len(alive_ents) != 1:
         event += 1
+        print(f'Event: {event} - Ents alive: {len(alive_ents)}')
         attacker, defender = sample(alive_ents, 2)
         spell_used = None
         if attacker.is_player:
-            spell_used = choice(list(attacker.player.spells_in_use))
+            spell_used = choice(list(attacker.player.spells_in_use.all()))
         attack = Attack.objects.create(attacker=attacker, defender=defender, spell=spell_used)
         BattleEvent.objects.create(battle=battle, attack=attack, number=event)
 
+        print(f'    {attacker.name} --> {defender.name}  (Damage caused: {round(attack.damage_caused, 3)})')
         if defender.health == 0:
             alive_ents.remove(defender)
 
