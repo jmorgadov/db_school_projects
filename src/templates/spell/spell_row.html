@@ -1,0 +1,16 @@
+<div class="grid grid-cols-12 gap-2 rounded bg-gray-800">
+    <div class="w-full h-full rounded-l items-center bg-gray-700 text-center">
+        {{ item.id }}
+    </div>
+    <div class="col-span-11 grid grid-cols-4 gap-2 py-1">
+        <div class="">
+            {{ item.spell.name }}
+        </div>
+        <div class="">
+            &#127993: {{ item.spell.damage }}
+        </div>
+        <div class="">
+            &#128128: {{ item.spell.average_pts }}
+        </div>
+    </div>
+</div>
