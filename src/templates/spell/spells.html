@@ -18,7 +18,7 @@
                 {% endfor %}
                 </div>
                 <div class="">
-                {% include "assets/button.html" with id="beast_search" name="beast_search" val="beast_search" text="Search" %}
+                {% include "assets/button.html" with id="spell_search" name="spell_search" val="spell_search" text="Search" %}
                 </div>
             </form>
         </div>
@@ -30,7 +30,7 @@
 
         <div class="overflow-auto h-96 space-y-1">
             {% for item in data %}
-            {% include "beast/beast_row.html" %}
+            {% include "spell/spell_row.html" %}
             {% endfor %}
         </div>
         {% endif %}

@@ -6,6 +6,8 @@ from django.views.generic.base import TemplateView
 from pages.generate import create_random_data
 
 from pages.forms import PlayerSearchForm
+from pages.forms import BeastSearchForm
+from pages.forms import SpellSearchForm
 from pages.models import *
 
 
@@ -80,25 +82,48 @@ class PlayerSearchView(BaseView):
         context = {'form': PlayerSearchForm()}
         return super().get_context_data(**context)
 
+class BeastSearchView(BaseView):
 
-def beast_search_view(request):
+    template_name = 'beast/beasts.html'
+    extra_context = { }
 
-    context = { }
-
-    if request.method == 'POST':
-        print(request.POST)
+    def post(self, request: HttpRequest, *args, **kwargs):
+        post = request.POST
         if request.POST.get('beast_search'):
-            search = {
-                'name': request.POST['name'],
-                'raze': request.POST['raze']
-            }
-            context['search'] = search
+            form = BeastSearchForm(post)
+            if 'checked' not in post:
+                form.reverse = False
+            print(form.data)
+            if form.is_valid():
+                self.extra_context['data'] = form.get_beasts()
+            self.extra_context['form'] = form
 
-    if 'search' in context.keys():
-        filters = {k: v for k, v in search.items() if v != ''}
-        all_beasts = Beast.objects.filter(**filters)
-    else:
-        all_beasts = Beast.objects.all()
-    context['data'] = all_beasts
+        return super().post(request, *args, **kwargs)
 
-    return render(request, 'beast/beasts.html', context)
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context = {'form': BeastSearchForm()}
+        return super().get_context_data(**context)
+
+class SpellSearchView(BaseView):
+
+    template_name = 'spell/spells.html'
+    extra_context = { }
+
+    def post(self, request: HttpRequest, *args, **kwargs):
+        post = request.POST
+        if request.POST.get('spell_search'):
+            form = SpellSearchForm(post)
+            if 'checked' not in post:
+                form.reverse = False
+            print(form.data)
+            if form.is_valid():
+                self.extra_context['data'] = form.get_spells()
+            self.extra_context['form'] = form
+
+        return super().post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context = {'form': SpellSearchForm()}
+        return super().get_context_data(**context)
