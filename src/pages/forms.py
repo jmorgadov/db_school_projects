@@ -80,7 +80,7 @@ class BeastSearchForm(forms.Form):
         "raze": "ent__raze",
         "damage": "ent__damage",
         "weakness": "ent__weakness",
-        "total_damage_caused": "total_damage_caused"
+        "battles": "battles",
     }
 
     def get_beasts(self):
@@ -109,48 +109,7 @@ class BeastSearchForm(forms.Form):
         all_beasts = (
             Beast.objects
                 .filter(**filt)
-                .annotate(
-                    win_battles=Beast.wins_battles(),
-                    total_damage_caused=Beast.damage_caused()
-                )
-                .order_by(order)
-            )
-        
-        print('reverse', data.get('reverse', False))
-        if data.get('reverse', False):
-            all_beasts = all_beasts.reverse()
-
-        if count >= 0:
-            return all_beasts[:count]
-        else:
-            return all_beasts
-
-    def get_beasts(self):
-        data = self.cleaned_data
-        filt = { 
-            'ent__name' : data.get('name', None),
-            'ent__raze' : data.get('raze', None),
-            'ent__damage' : data.get('damage', None),
-            'ent__weakness' : data.get('weakness', None)
-        }
-        filt = {k:v for k, v in filt.items() if v != ''}
-        print(filt)
-
-        count = -1
-        try:
-            count = int(data.get('count'))
-        except ValueError:
-            pass
-
-        order = data.get('order_by')
-        if order == '' or order is None:
-            order = 'pk'
-        else:
-            order = self.order_by_map.get(order.lower().replace(' ','_'), 'pk')
-
-        all_beasts = (
-            Beast.objects
-                .filter(**filt)
+                .annotate(battles=Beast.battles())
                 .order_by(order)
             )
         

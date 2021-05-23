@@ -26,24 +26,24 @@ class Attack(models.Model):
     damage_caused = models.IntegerField(default=0, blank=False, null=False)
 
     def save(self, *agrs, **kwagrs) -> None:
-        # self.defender_pts_before = self.defender.health
+        self.defender_pts_before = self.defender.health
         
-        # dmg_pts = 0
-        # ent_t, instance = self.attacker.ent_type
-        # multiplier = (random() / 10) - 0.05
-        # if ent_t == 'player':
-        #     dmg_pts = self.spell.average_pts + self.spell.average_pts * multiplier
-        # elif ent_t == 'beast':
-        #     dmg_pts = instance.damage_pts + instance.damage_pts * multiplier
+        dmg_pts = 0
+        ent_t, instance = self.attacker.ent_type
+        multiplier = (random() / 10) - 0.05
+        if ent_t == 'player':
+            dmg_pts = self.spell.average_pts + self.spell.average_pts * multiplier
+        elif ent_t == 'beast':
+            dmg_pts = instance.damage_pts + instance.damage_pts * multiplier
 
-        # if self.defender.weakness == self.attacker.damage:
-        #     dmg_pts += 100
+        if self.defender.weakness == self.attacker.damage:
+            dmg_pts += 100
 
-        # new_health = max(0, self.defender.health - dmg_pts)
-        # self.defender.health = new_health
-        # self.defender.save()
+        new_health = max(0, self.defender.health - dmg_pts)
+        self.defender.health = new_health
+        self.defender.save()
 
-        # self.damage_caused = self.defender_pts_before - new_health
+        self.damage_caused = self.defender_pts_before - new_health
         return super().save(*agrs, **kwagrs)
 
 class Ent(models.Model):
@@ -117,15 +117,12 @@ class Beast(models.Model):
     ent = models.OneToOneField(Ent, models.CASCADE)
     damage_pts = models.IntegerField()
 
-    def wins_battles():
+    def battles():
         return Count(
-            'ent__battleparticipant',
-            filter=Q(ent__battleparticipant__winner=True),
+            'ent__battleparticipant__battle',
             distinct=True
         )
 
-    def damage_caused():
-        return Sum('ent__attacker__damage_caused', distinct=True)
 
 
 def get_random_sample(model_type, k=1):
@@ -181,7 +178,7 @@ def simulate_battle(participants=16):
         if defender.health == 0:
             alive_ents.remove(defender)
 
-    bp = BattleParticipant.objects.get(ent__pk=attacker.pk)
+    bp = BattleParticipant.objects.get(ent__pk=attacker.pk, battle=battle)
     bp.winner = True
     bp.save()
 
