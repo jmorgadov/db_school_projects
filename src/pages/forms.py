@@ -168,22 +168,26 @@ class SpellSearchForm(forms.Form):
     name = forms.CharField(label='Name', required=False)
     damage = forms.CharField(label='Damage', required=False)
     average_pts = forms.IntegerField(label='Average Pts', required=False)
+    count = forms.CharField(label='Count', required=False)
+    order_by = forms.CharField(label='Order by', required=False)
     reverse = forms.BooleanField(label='Reverse', required=False)
 
     order_by_map = {
-        "name": "spell__name",
-        "damage": "spell__damage",
-        "average_pts": "spell__average_pts"
+        "name": "name",
+        "damage": "damage",
+        "average_pts": "average_pts",
+        "known_by": "known_by",
+        "times_used": "times_used"
     }
 
     def get_spells(self):
         data = self.cleaned_data
         filt = { 
-            'spell__name' : data.get('name', None),
-            'spell__damage' : data.get('damage', None),
-            'spell__average_pts' : data.get('average_pts', None)
+            'name' : data.get('name', None),
+            'damage' : data.get('damage', None),
+            'average_pts' : data.get('average_pts', None)
         }
-        filt = {k:v for k, v in filt.items() if v != ''}
+        filt = {k:v for k, v in filt.items() if v != '' and v is not None}
         print(filt)
 
         count = -1
@@ -199,8 +203,10 @@ class SpellSearchForm(forms.Form):
             order = self.order_by_map.get(order.lower().replace(' ','_'), 'pk')
 
         all_spells = (
-            Spells.objects
+            Spell.objects
                 .filter(**filt)
+                .annotate(known_by_count=Spell.known_by_count())
+                .annotate(times_used=Spell.times_used())
                 .order_by(order)
             )
         

@@ -52,7 +52,6 @@ class Ent(models.Model):
     damage = models.CharField(max_length=50, blank=False, null=False)
     weakness = models.CharField(max_length=50, blank=False, null=False)
     health = models.FloatField(default=100, blank=False, null=False)
-    battles = models.ManyToManyField(Battle, through=BattleParticipant, related_name='battles_part')
 
     @property
     def ent_type(self):
@@ -83,6 +82,17 @@ class Spell(models.Model):
     damage = models.CharField(max_length=50, blank=False, null=False)
     average_pts = models.IntegerField()
 
+    def known_by_count():
+        return Count(
+            'known_by',
+            distinct=True
+        )
+
+    def times_used():
+        return Count(
+            'attack'
+        )
+
 class BattleEvent(models.Model):
     attack = models.ForeignKey(Attack, models.CASCADE)
     battle = models.ForeignKey(Battle, models.CASCADE)
@@ -91,21 +101,31 @@ class BattleEvent(models.Model):
 class Player(models.Model):
     ent = models.OneToOneField(Ent, models.CASCADE)
     spells_in_use = models.ManyToManyField(Spell, related_name='in_use_by')
-    known_spells = models.ManyToManyField(Spell, related_name='knonw_by')
+    known_spells = models.ManyToManyField(Spell, related_name='known_by')
 
     def wins_battles():
         return Count(
-            'ent__battles',
-            filter=Q(ent__battles__battleparticipant__winner=True),
+            'ent__battleparticipant',
+            filter=Q(ent__battleparticipant__winner=True),
             distinct=True
         )
 
     def damage_caused():
-        return Sum('ent__attacker__damage_caused')
+        return Sum('ent__attacker__damage_caused', distinct=True)
 
 class Beast(models.Model):
     ent = models.OneToOneField(Ent, models.CASCADE)
     damage_pts = models.IntegerField()
+
+    def wins_battles():
+        return Count(
+            'ent__battleparticipant',
+            filter=Q(ent__battleparticipant__winner=True),
+            distinct=True
+        )
+
+    def damage_caused():
+        return Sum('ent__attacker__damage_caused', distinct=True)
 
 
 def get_random_sample(model_type, k=1):

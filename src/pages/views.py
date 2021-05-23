@@ -120,7 +120,7 @@ class SpellSearchView(BaseView):
             if form.is_valid():
                 self.extra_context['data'] = form.get_spells()
             self.extra_context['form'] = form
-
+        print(self.extra_context)
         return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:

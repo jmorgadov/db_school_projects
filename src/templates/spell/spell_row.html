@@ -3,14 +3,26 @@
         {{ item.id }}
     </div>
     <div class="col-span-11 grid grid-cols-4 gap-2 py-1">
-        <div class="">
-            {{ item.spell.name }}
+        <div class="col-span-2">
+            <p class="font-bold"> {{ item.name }} </p>
         </div>
         <div class="">
-            &#127993: {{ item.spell.damage }}
+            <p class="text-gray-500 inline">Damage: </p>
+            <p class="inline">{{ item.damage }}</p>
         </div>
         <div class="">
-            &#128128: {{ item.spell.average_pts }}
+            <p class="text-gray-500 inline">Avg. pts: </p>
+            <p class="inline">{{ item.average_pts }}</p>
+        </div>
+        <div class="col-span-full grid grid-cols-2">
+            <div class="">
+                <p class="text-gray-500 inline">Known by: </p>
+                <p class="inline">{{ item.known_by_count }}</p>
+            </div>
+            <div class="">
+                <p class="text-gray-500 inline">Times used: </p>
+                <p class="inline">{{ item.times_used }}</p>
+            </div>
         </div>
     </div>
 </div>

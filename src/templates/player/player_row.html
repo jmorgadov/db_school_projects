@@ -7,20 +7,25 @@
             {{ item.ent.name }}
         </div>
         <div class="">
-            {{ item.ent.raze }}
+            <p class="text-gray-500 inline">Raze: </p>
+            <p class="inline">{{ item.ent.raze }}</p>
         </div>
         <div class="">
-            &#127993: {{ item.ent.damage }}
+            <p class="text-gray-500 inline">Damage: </p>
+            <p class="inline">{{ item.ent.damage }}</p>
         </div>
         <div class="">
-            &#128128: {{ item.ent.weakness }}
+            <p class="text-gray-500 inline">Weakness: </p>
+            <p class="inline">{{ item.ent.weakness }}</p>
         </div>
         <div class="col-span-full flex flex-row">
             <div class="w-1/2">
-                <p>Win battels: {{ item.win_battles|default:'0' }} </p>
+                <p class="text-gray-500 inline">Win battels:</p>
+                <p class="inline"> {{ item.win_battles|default:'0' }} </p>
             </div>
             <div class="w-1/2">
-                <p>Total damage caused: {{ item.total_damage_caused|default:'0' }} </p>
+                <p class="text-gray-500 inline">Total damage caused:</p>
+                <p class="inline"> {{ item.total_damage_caused|default:'0' }} </p>
             </div>
         </div>
     </div>
