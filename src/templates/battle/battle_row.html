@@ -1,0 +1,15 @@
+<div class="grid grid-cols-12 gap-2 rounded bg-gray-800">
+    <div class="w-full h-full rounded-l items-center bg-gray-700 text-center">
+        {{ item.id }}
+    </div>
+    <div class="col-span-11 grid grid-cols-2 gap-2 py-1">
+        <div class="">
+            <p class="text-gray-500 inline">Location: </p>
+            <p class="inline">{{ item.location.name }}</p>
+        </div>
+        <div class="">
+            <p class="text-gray-500 inline">Duration: </p>
+            <p class="inline">{{ item.duration }}</p>
+        </div>
+    </div>
+</div>

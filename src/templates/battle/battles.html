@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex text-blue-200">
+    <div class="w-5/6 mx-auto pt-4 space-y-1">
+        <div class="my-4 space-y-2">
+            <div class="font-bold text-xl">
+                Filters
+            </div>
+            <form method="post" action=""> {% csrf_token %}
+                {% include "assets/search_form.html" with form=form %}
+                <div class="">
+                {% include "assets/button.html" with id="battle_search" name="battle_search" val="battle_search" text="Search" %}
+                </div>
+            </form>
+        </div>
+
+        {% if data %}
+        <div class="font-bold text-xl">
+            Results: {{ data|length }}
+        </div>
+
+        <div class="overflow-auto h-96 space-y-1">
+            {% for item in data %}
+            {% include "battle/battle_row.html" %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

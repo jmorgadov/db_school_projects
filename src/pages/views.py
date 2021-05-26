@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
 from pages.generate import create_random_data
 
-from pages.forms import PlayerSearchForm, SearchForm
+from pages.forms import BattleSearchForm, PlayerSearchForm, SearchForm
 from pages.forms import BeastSearchForm
 from pages.forms import SpellSearchForm
 from pages.models import *
@@ -56,6 +56,10 @@ class HomeView(BaseView):
             'name': 'Spells',
             'url': 'spells',
             'image': 'spell.jpg'
+        }, {
+            'name': 'Battles',
+            'url': 'battles',
+            'image': 'battle.jpg'
         }]
         return context
 
@@ -128,5 +132,30 @@ class SpellSearchView(BaseView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context = {'form': SpellSearchForm()}
+        print(context['form'].orders())
+        return super().get_context_data(**context)
+
+
+class BattleSearchView(BaseView):
+
+    template_name = 'battle/battles.html'
+    extra_context = { }
+
+    def post(self, request: HttpRequest, *args, **kwargs):
+        post = request.POST
+        if request.POST.get('battle_search'):
+            form = BattleSearchForm(post)
+            if 'checked' not in post:
+                form.reverse = False
+            print(form.data)
+            if form.is_valid():
+                self.extra_context['data'] = form.get_query()
+            self.extra_context['form'] = form
+        print(self.extra_context)
+        return super().post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context = {'form': BattleSearchForm()}
         print(context['form'].orders())
         return super().get_context_data(**context)

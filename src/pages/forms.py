@@ -3,7 +3,7 @@ from django import forms
 from django.db.models import query
 from django.db.models.base import Model
 from django.db.models.query import QuerySet
-from pages.models import Player
+from pages.models import Battle, Player
 from pages.models import Beast
 from pages.models import Spell
 
@@ -61,7 +61,7 @@ class PlayerSearchForm(SearchForm):
 
     def get_order_by_map(self):
         self.order_by_map = {
-            'Id': 'id',
+            'Id': 'pk',
             'Name': 'ent__name',
             'Raze': 'ent__raze',
             'Damage': 'ent__damage',
@@ -98,7 +98,7 @@ class BeastSearchForm(SearchForm):
 
     def get_order_by_map(self):
         self.order_by_map = {
-            'Id': 'id',
+            'Id': 'pk',
             'Name': 'ent__name',
             'Raze': 'ent__raze',
             'Damage': 'ent__damage',
@@ -133,7 +133,7 @@ class SpellSearchForm(SearchForm):
 
     def get_order_by_map(self):
         self.order_by_map = {
-            'Id': 'id',
+            'Id': 'pk',
             'Name': 'name',
             'Damage': 'damage',
             'Average pts': 'average_pts',
@@ -158,4 +158,27 @@ class SpellSearchForm(SearchForm):
             )
         return super().get_query()
 
+class BattleSearchForm(SearchForm):
+    location = forms.CharField(label='Location', required=False)
 
+    def get_order_by_map(self):
+        self.order_by_map = {
+            'Id': 'pk',
+            'Location': 'location__name',
+            'Duration': 'duration'
+        }
+        return super().get_order_by_map()
+
+    def get_query(self):
+        data = self.cleaned_data
+        filt = { 
+            'location__name' : data.get('location', None)
+        }
+        filt = {k:v for k, v in filt.items() if v != '' and v is not None}
+
+        self.query_set = (
+            Battle.objects
+                .filter(**filt)
+                .annotate(duration=Battle.duration_query())
+            )
+        return super().get_query()

@@ -12,6 +12,13 @@ class Battle(models.Model):
     location = models.ForeignKey(Location, models.CASCADE)
     date = models.DateField(blank=False, null=False)
 
+    def duration_query():
+        return Count(
+            'battleevent',
+            distinct=True
+        )
+
+
 class BattleParticipant(models.Model):
     ent = models.ForeignKey("Ent", models.CASCADE)
     battle = models.ForeignKey("Battle", models.CASCADE)
