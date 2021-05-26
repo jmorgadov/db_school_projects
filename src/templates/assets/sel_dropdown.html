@@ -1,0 +1,54 @@
+<div class="relative w-full">
+    <div
+        class="relative z-30 cursor-pointer flex flex-row rounded w-full border border-gray-600 focus-within bg-gray-800 text-gray-200 font-bold p-2 px-4  focus:outline-none"
+        id="button-{{ id }}">
+        <p class="flex-grow text-left" id="text-{{ id }}">{{ first_item }}</p>
+        <svg viewbox="0 0 8 8" class="ml-3 my-auto w-5">
+            <path class="" stroke="white" stroke-width="1" fill="none" d="M1.3 3 L4 5.5 L6.7 3" id="path-down-{{ id }}" />
+            <path class="hidden" stroke="white" stroke-width="1" fill="none" d="M1.3 5 L4 2.5 L6.7 5" id="path-up-{{ id }}" />
+        </svg>
+        <input class="hidden absolute" name="{{ id }}" id="input-{{ id }}" value="{{ first_item }}">
+        </input>
+    </div>
+    <div class="absolute z-30 mt-2 shadow-2xl border border-gray-600 rounded bg-gray-800 hidden flex-col w-64 px-3 gap-2 py-2 overflow-y-auto max-h-72"
+        id="drop-menu-{{ id }}">
+        {% for item in items %}
+        <a href="#" class="text-gray-400 font-bold hover:text-gray-200" id="drop-item-{{ id }}"> {{ item }} </a>
+        {% endfor %}
+    </div>
+</div>
+<div class="fixed z-20 bg-gray-900 hidden inset-0 opacity-80 w-screen h-screen cursor-default" id="back-{{ id }}">
+</div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const button = document.querySelector('#button-{{ id }}')
+        const input = document.querySelector('#input-{{ id }}')
+        const text = document.querySelector('#text-{{ id }}')
+        const drop = document.querySelector('#drop-menu-{{ id }}')
+        const items = document.querySelectorAll('#drop-item-{{ id }}')
+        const back = document.querySelector('#back-{{ id }}')
+        const pu = document.querySelector('#path-down-{{ id }}')
+        const pd = document.querySelector('#path-up-{{ id }}')
+
+        function toggle() {
+            console.log('toggle')
+            drop.classList.toggle('flex')
+            drop.classList.toggle('hidden')
+            back.classList.toggle('hidden')
+            pu.classList.toggle('hidden')
+            pd.classList.toggle('hidden')
+        }
+
+        for (let index = 0; index < items.length; index++) {
+            const element = items[index];
+            element.addEventListener('click', () => {
+                text.textContent = element.textContent
+                input.value = element.textContent
+                toggle()
+            })
+        }
+        button.addEventListener('click', toggle)
+        back.addEventListener('click', toggle)
+    })
+</script>

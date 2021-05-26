@@ -1,29 +1,77 @@
+from typing import Dict, List
 from django import forms
+from django.db.models import query
 from django.db.models.base import Model
 from django.db.models.query import QuerySet
 from pages.models import Player
 from pages.models import Beast
 from pages.models import Spell
 
-class PlayerSearchForm(forms.Form):
-    name = forms.CharField(label='Name', required=False)
-    raze = forms.CharField(label='Raze', required=False)
-    damage = forms.CharField(label='Damage', required=False)
-    weakness = forms.CharField(label='Weakness', required=False)
+
+class SearchForm(forms.Form):
     count = forms.CharField(label='Count', required=False)
     order_by = forms.CharField(label='Order by', required=False)
     reverse = forms.BooleanField(label='Reverse', required=False)
 
-    order_by_map = {
-        "name": "ent__name",
-        "raze": "ent__raze",
-        "damage": "ent__damage",
-        "weakness": "ent__weakness",
-        "win_battles": "win_battles",
-        "total_damage_caused": "total_damage_caused"
-    }
+    order_by_map: Dict[str, str] = { 'Id' : 'pk' }
+    ordering_by: str = 'Id'
+    query_set: QuerySet = None
 
-    def get_players(self):
+    def __init__(self, *args, **kwargs) -> None:
+        self.order_by_map = self.get_order_by_map()
+        super().__init__(*args, **kwargs)
+
+    def orders(self):
+        return list(self.order_by_map.keys())
+
+    def get_order_by_map(self):
+        return self.order_by_map
+
+    def get_query(self):
+        data = self.cleaned_data
+
+        order_by_map = self.get_order_by_map()
+        order = data.get('order_by')
+        if order == '' or order is None:
+            order = 'Id'
+        self.ordering_by = order
+        order = order_by_map.get(order, 'pk')
+
+        self.query_set = self.query_set.order_by(order)
+
+        if data.get('reverse', False):
+            self.query_set = self.query_set.reverse()
+
+        count = -1
+        try:
+            count = int(data.get('count'))
+        except ValueError:
+            pass
+
+        if count >= 0:
+            return self.query_set[:count]
+        else:
+            return self.query_set
+    
+class PlayerSearchForm(SearchForm):
+    name = forms.CharField(label='Name', required=False)
+    raze = forms.CharField(label='Raze', required=False)
+    damage = forms.CharField(label='Damage', required=False)
+    weakness = forms.CharField(label='Weakness', required=False)
+
+    def get_order_by_map(self):
+        self.order_by_map = {
+            'Id': 'id',
+            'Name': 'ent__name',
+            'Raze': 'ent__raze',
+            'Damage': 'ent__damage',
+            'Weakness': 'ent__weakness',
+            'Win battles': 'win_battles',
+            'Total damage caused': 'total_damage_caused'
+        }
+        return super().get_order_by_map()
+
+    def get_query(self):
         data = self.cleaned_data
         filt = { 
             'ent__name' : data.get('name', None),
@@ -32,58 +80,34 @@ class PlayerSearchForm(forms.Form):
             'ent__weakness' : data.get('weakness', None)
         }
         filt = {k:v for k, v in filt.items() if v != ''}
-        print(filt)
-
-        count = -1
-        try:
-            count = int(data.get('count'))
-        except ValueError:
-            pass
-
-        order = data.get('order_by')
-        if order == '' or order is None:
-            order = 'pk'
-        else:
-            order = self.order_by_map.get(order.lower().replace(' ','_'), 'pk')
-
-        all_players = (
+        self.query_set = (
             Player.objects
                 .filter(**filt)
                 .annotate(
                     win_battles=Player.wins_battles(),
                     total_damage_caused=Player.damage_caused()
                 )
-                .order_by(order)
             )
-        
-        print('reverse', data.get('reverse', False))
-        if data.get('reverse', False):
-            all_players = all_players.reverse()
+        return super().get_query()
 
-        if count >= 0:
-            return all_players[:count]
-        else:
-            return all_players
-
-
-class BeastSearchForm(forms.Form):
+class BeastSearchForm(SearchForm):
     name = forms.CharField(label='Name', required=False)
     raze = forms.CharField(label='Raze', required=False)
     damage = forms.CharField(label='Damage', required=False)
     weakness = forms.CharField(label='Weakness', required=False)
-    count = forms.CharField(label='Count', required=False)
-    order_by = forms.CharField(label='Order by', required=False)
-    reverse = forms.BooleanField(label='Reverse', required=False)
 
-    order_by_map = {
-        "name": "ent__name",
-        "raze": "ent__raze",
-        "damage": "ent__damage",
-        "weakness": "ent__weakness",
-        "battles": "battles",
-    }
+    def get_order_by_map(self):
+        self.order_by_map = {
+            'Id': 'id',
+            'Name': 'ent__name',
+            'Raze': 'ent__raze',
+            'Damage': 'ent__damage',
+            'Weakness': 'ent__weakness',
+            'Battles': 'battles',
+        }
+        return super().get_order_by_map()
 
-    def get_beasts(self):
+    def get_query(self):
         data = self.cleaned_data
         filt = { 
             'ent__name' : data.get('name', None),
@@ -92,54 +116,33 @@ class BeastSearchForm(forms.Form):
             'ent__weakness' : data.get('weakness', None)
         }
         filt = {k:v for k, v in filt.items() if v != ''}
-        print(filt)
 
-        count = -1
-        try:
-            count = int(data.get('count'))
-        except ValueError:
-            pass
-
-        order = data.get('order_by')
-        if order == '' or order is None:
-            order = 'pk'
-        else:
-            order = self.order_by_map.get(order.lower().replace(' ','_'), 'pk')
-
-        all_beasts = (
+        self.query_set = (
             Beast.objects
                 .filter(**filt)
                 .annotate(battles=Beast.battles())
-                .order_by(order)
             )
-        
-        print('reverse', data.get('reverse', False))
-        if data.get('reverse', False):
-            all_beasts = all_beasts.reverse()
 
-        if count >= 0:
-            return all_beasts[:count]
-        else:
-            return all_beasts
+        return super().get_query()
 
 
-class SpellSearchForm(forms.Form):
+class SpellSearchForm(SearchForm):
     name = forms.CharField(label='Name', required=False)
     damage = forms.CharField(label='Damage', required=False)
     average_pts = forms.IntegerField(label='Average Pts', required=False)
-    count = forms.CharField(label='Count', required=False)
-    order_by = forms.CharField(label='Order by', required=False)
-    reverse = forms.BooleanField(label='Reverse', required=False)
 
-    order_by_map = {
-        "name": "name",
-        "damage": "damage",
-        "average_pts": "average_pts",
-        "known_by": "known_by",
-        "times_used": "times_used"
-    }
+    def get_order_by_map(self):
+        self.order_by_map = {
+            'Id': 'id',
+            'Name': 'name',
+            'Damage': 'damage',
+            'Average pts': 'average_pts',
+            'Known by': 'known_by',
+            'Times used': 'times_used'
+        }
+        return super().get_order_by_map()
 
-    def get_spells(self):
+    def get_query(self):
         data = self.cleaned_data
         filt = { 
             'name' : data.get('name', None),
@@ -147,35 +150,12 @@ class SpellSearchForm(forms.Form):
             'average_pts' : data.get('average_pts', None)
         }
         filt = {k:v for k, v in filt.items() if v != '' and v is not None}
-        print(filt)
-
-        count = -1
-        try:
-            count = int(data.get('count'))
-        except ValueError:
-            pass
-
-        order = data.get('order_by')
-        if order == '' or order is None:
-            order = 'pk'
-        else:
-            order = self.order_by_map.get(order.lower().replace(' ','_'), 'pk')
-
-        all_spells = (
+        self.query_set = (
             Spell.objects
                 .filter(**filt)
                 .annotate(known_by_count=Spell.known_by_count())
                 .annotate(times_used=Spell.times_used())
-                .order_by(order)
             )
-        
-        print('reverse', data.get('reverse', False))
-        if data.get('reverse', False):
-            all_spells = all_spells.reverse()
-
-        if count >= 0:
-            return all_spells[:count]
-        else:
-            return all_spells
+        return super().get_query()
 
 

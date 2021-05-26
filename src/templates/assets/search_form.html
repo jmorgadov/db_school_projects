@@ -1,0 +1,11 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mb-3">
+{% for field in form %}
+    {% if field.name != "count" and field.name != "order_by" and field.name != "reverse" %}
+    {% include "assets/input.html" with name=field.name ph=field.label val=field.value %}
+    {% endif %}
+{% endfor %}
+<div class="col-span-full border-b p-1 border-gray-700 mb-1"></div>
+{% include "assets/input.html" with name="count" ph=form.count.label val=form.count.value %}
+{% include "assets/sel_dropdown.html" with id="order_by" items=form.orders first_item=form.ordering_by %}
+{% include "assets/checkbox.html" with name="reverse" text=form.reverse.label checked=form.reverse.value %}
+</div>

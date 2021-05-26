@@ -8,15 +8,7 @@
                 Filters
             </div>
             <form method="post" action=""> {% csrf_token %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mb-3">
-                {% for field in form %}
-                    {% if field.name == "reverse" %}
-                    {% include "assets/checkbox.html" with name="reverse" text=form.reverse.label checked=form.reverse.value %}
-                    {% else %}
-                    {% include "assets/input.html" with name=field.name ph=field.label val=field.value %}
-                    {% endif %}
-                {% endfor %}
-                </div>
+                {% include "assets/search_form.html" with form=form %}
                 <div class="">
                 {% include "assets/button.html" with id="beast_search" name="beast_search" val="beast_search" text="Search" %}
                 </div>

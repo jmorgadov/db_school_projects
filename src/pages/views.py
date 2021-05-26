@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
 from pages.generate import create_random_data
 
-from pages.forms import PlayerSearchForm
+from pages.forms import PlayerSearchForm, SearchForm
 from pages.forms import BeastSearchForm
 from pages.forms import SpellSearchForm
 from pages.models import *
@@ -72,7 +72,7 @@ class PlayerSearchView(BaseView):
                 form.reverse = False
             print(form.data)
             if form.is_valid():
-                self.extra_context['data'] = form.get_players()
+                self.extra_context['data'] = form.get_query()
             self.extra_context['form'] = form
 
         return super().post(request, *args, **kwargs)
@@ -80,6 +80,7 @@ class PlayerSearchView(BaseView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context = {'form': PlayerSearchForm()}
+        print(context['form'].orders())
         return super().get_context_data(**context)
 
 class BeastSearchView(BaseView):
@@ -95,7 +96,7 @@ class BeastSearchView(BaseView):
                 form.reverse = False
             print(form.data)
             if form.is_valid():
-                self.extra_context['data'] = form.get_beasts()
+                self.extra_context['data'] = form.get_query()
             self.extra_context['form'] = form
 
         return super().post(request, *args, **kwargs)
@@ -103,6 +104,7 @@ class BeastSearchView(BaseView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context = {'form': BeastSearchForm()}
+        print(context['form'].orders())
         return super().get_context_data(**context)
 
 class SpellSearchView(BaseView):
@@ -118,7 +120,7 @@ class SpellSearchView(BaseView):
                 form.reverse = False
             print(form.data)
             if form.is_valid():
-                self.extra_context['data'] = form.get_spells()
+                self.extra_context['data'] = form.get_query()
             self.extra_context['form'] = form
         print(self.extra_context)
         return super().post(request, *args, **kwargs)
@@ -126,4 +128,5 @@ class SpellSearchView(BaseView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context = {'form': SpellSearchForm()}
+        print(context['form'].orders())
         return super().get_context_data(**context)
