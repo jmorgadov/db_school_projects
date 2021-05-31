@@ -40,6 +40,10 @@ class HomeView(BaseView):
         post = request.POST
         if 'generate' in post:
             create_random_data()
+        if 'simulate_batt' in post:
+            redirect('simulate')
+        print(post)
+
         return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -62,6 +66,8 @@ class HomeView(BaseView):
             'image': 'battle.jpg'
         }]
         return context
+
+
 
 class PlayerSearchView(BaseView):
 

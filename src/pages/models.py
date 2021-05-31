@@ -141,7 +141,7 @@ def get_random_sample(model_type, k=1):
 def get_random_entry(model_type):
     return get_random_sample(model_type)[0]
 
-def simulate_battle(participants=16):
+def simulate_battle_iter(participants=16):
     location = get_random_entry(Location)
     date = datetime.now() - timedelta(days=randint(0, 365), minutes=randint(0,59))
     battle = Battle.objects.create(location=location, date=date)
@@ -173,7 +173,7 @@ def simulate_battle(participants=16):
     event = 0
     while len(alive_ents) != 1:
         event += 1
-        print(f'Event: {event} - Ents alive: {len(alive_ents)}')
+        print(f'    Event: {event} - Ents alive: {len(alive_ents)}')
         attacker, defender = sample(alive_ents, 2)
         spell_used = None
         if attacker.is_player:
@@ -181,7 +181,7 @@ def simulate_battle(participants=16):
         attack = Attack.objects.create(attacker=attacker, defender=defender, spell=spell_used)
         BattleEvent.objects.create(battle=battle, attack=attack, number=event)
 
-        print(f'    {attacker.name} --> {defender.name}  (Damage caused: {round(attack.damage_caused, 3)})')
+        yield f'{attacker.name:^24} --> {defender.name:^24}  (Damage caused: {round(attack.damage_caused, 3)})'
         if defender.health == 0:
             alive_ents.remove(defender)
 
@@ -189,6 +189,7 @@ def simulate_battle(participants=16):
     bp.winner = True
     bp.save()
 
-        
 
-
+def simulate_battle(participants=16):
+    for log in simulate_battle_iter(participants):
+        print(log)

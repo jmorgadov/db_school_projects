@@ -16,12 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
-from pages import views as page_views
 from data_manager import views as dm_views
 
 urlpatterns = [
-    path('', include('users.urls')),
-    path('', include('pages.urls')),
-    path('', include('data_manager.urls')),
-    path('admin/', admin.site.urls),
+    path('simulate/', dm_views.SimulateBattleView.as_view(), name='simulate')
 ]
