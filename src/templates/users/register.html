@@ -2,61 +2,26 @@
 
 {% block content %}
 <form method="post" action=""> {% csrf_token %}
-    <div class="grid grid-cols-1 mx-auto gap-2 rounded-xl w-72 mt-20 m-10 p-1 m-2 text-center">
+   <div class="grid grid-cols-1 mx-auto gap-2 rounded-xl w-72 mt-20 m-10 p-1 m-2 text-center">
 
-        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Name *" name="name" value="{{ form.name.value|default:'' }}" autocomplete="off" />        
-        {% if form.errors.name %}
-        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ form.errors.name }}
-        </div>
-        {% endif %}
-        
-        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Last name *" name="last_name" value="{{ form.last_name.value|default:'' }}" autocomplete="off" />        
-        {% if form.errors.last_name %}
-        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ form.errors.last_name }}
-        </div>
-        {% endif %}
-        
-        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Nick *" name="nick" value="{{ form.nick.value|default:'' }}" autocomplete="off" />        
-        {% if form.errors.nick %}
-        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ form.errors.nick }}
-        </div>
-        {% endif %}
-        
-        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Email *" name="email" value="{{ form.email.value|default:'' }}" autocomplete="off" />        
-        {% if form.errors.email %}
-        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ form.errors.email }}
-        </div>
-        {% endif %}
-        
-        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Password *" name="password" value="{{ form.password.value|default:'' }}" autocomplete="off" type="password"/>        
-        {% if form.errors.password %}
-        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ form.errors.password }}
-        </div>
-        {% endif %}
-        
-        <input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="Confirm password *" name="password_conf" value="{{ form.password_conf.value|default:'' }}" autocomplete="off" type="password"/>        
-        {% if form.errors.password_conf %}
-        <div class="font-thin ml-2 text-blue-400 text-left text-xs">
-           {{ form.errors.password_conf }}
-        </div>
-        {% endif %}
-        
-        <div class="font-thin ml-2 text-gray-600 text-left text-xs">
-            * Required fields
-         </div>
-        <button class="w-2/4 mx-auto p-2 mt-2 bg-blue-400 rounded-md font-bold text-gray-900" name="register">
-            Create account
-        </button>
+      {% include "assets/valid_input.html" with ph="Name *" name="name" value=from.name.value error=form.errors.name %}
+      {% include "assets/valid_input.html" with ph="Last name" name="last_name" value=from.last_name.value error=form.errors.last_name %}
+      {% include "assets/valid_input.html" with ph="Nick *" name="nick" value=from.nick.value error=form.errors.nick %}
+      {% include "assets/valid_input.html" with ph="Email *" name="email" value=from.email.value error=form.errors.email %}
+      {% include "assets/valid_input.html" with ph="Password *" name="password" value=from.password.value error=form.errors.password %}
+      {% include "assets/valid_input.html" with ph="Confirm password *" name="password_conf" value=from.password_conf.value error=form.errors.password_conf %}
 
-        <a href="../login/" class="p-2 font-thin text-blue-400" name="login">
-            I have already an account.
-        </a>
-    </div>
+      <div class="font-thin ml-2 text-gray-600 text-left text-xs">
+         * Required fields
+      </div>
+      <button class="w-2/4 mx-auto p-2 mt-2 bg-blue-400 rounded-md font-bold text-gray-900" name="register">
+         Create account
+      </button>
+
+      <a href="../login/" class="p-2 font-thin text-blue-400" name="login">
+         I have already an account.
+      </a>
+   </div>
 </form>
 
 {% endblock %}

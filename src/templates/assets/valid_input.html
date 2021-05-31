@@ -1,0 +1,6 @@
+<input class="border border-gray-800 bg-gray-800 p-2 rounded font-thin text-gray-200 focus:outline-none focus:border-blue-400" placeholder="{{ ph }}" name="{{ name }}" value="{{ value|default:'' }}" autocomplete="{{ ac|default:'off' }}" />
+{% if error %}
+<div class="font-thin ml-2 text-blue-400 text-left text-xs">
+   {{ error }}
+</div>
+{% endif %}
